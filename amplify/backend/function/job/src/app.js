@@ -1,20 +1,14 @@
-/*
-Copyright 2017 - 2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with the License. A copy of the License is located at
-    http://aws.amazon.com/apache2.0/
-or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and limitations under the License.
-*/
-
-
-
-const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
-const { DeleteCommand, DynamoDBDocumentClient, GetCommand, PutCommand, QueryCommand, ScanCommand } = require('@aws-sdk/lib-dynamodb');
+const {DynamoDBClient} = require('@aws-sdk/client-dynamodb');
+const {
+  DeleteCommand, DynamoDBDocumentClient, GetCommand, PutCommand, QueryCommand, ScanCommand
+} = require('@aws-sdk/lib-dynamodb');
 const awsServerlessExpressMiddleware = require('aws-serverless-express/middleware')
 const bodyParser = require('body-parser')
 const express = require('express')
+const { uuidEmit } = require('uuid-timestamp');
 
-const ddbClient = new DynamoDBClient({ region: process.env.TABLE_REGION });
+
+const ddbClient = new DynamoDBClient({region: process.env.TABLE_REGION});
 const ddbDocClient = DynamoDBDocumentClient.from(ddbClient);
 
 let tableName = "jobsystem";
@@ -39,7 +33,7 @@ app.use(bodyParser.json())
 app.use(awsServerlessExpressMiddleware.eventContext())
 
 // Enable CORS for all methods
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*")
   res.header("Access-Control-Allow-Headers", "*")
   next()
@@ -47,7 +41,7 @@ app.use(function(req, res, next) {
 
 // convert url string param to expected Type
 const convertUrlType = (param, type) => {
-  switch(type) {
+  switch (type) {
     case "N":
       return Number.parseInt(param);
     default:
@@ -56,13 +50,12 @@ const convertUrlType = (param, type) => {
 }
 
 /************************************
-* HTTP Get method to list objects *
-************************************/
+ * HTTP Get method to list objects *
+ ************************************/
 
-app.get(path, async function(req, res) {
-  var params = {
-    TableName: tableName,
-    Select: 'ALL_ATTRIBUTES',
+app.get(path, async function (req, res) {
+  const params = {
+    TableName: tableName, Select: 'ALL_ATTRIBUTES',
   };
 
   try {
@@ -74,46 +67,11 @@ app.get(path, async function(req, res) {
   }
 });
 
-/************************************
- * HTTP Get method to query objects *
- ************************************/
-
-app.get(path + hashKeyPath, async function(req, res) {
-  const condition = {}
-  condition[partitionKeyName] = {
-    ComparisonOperator: 'EQ'
-  }
-
-  if (userIdPresent && req.apiGateway) {
-    condition[partitionKeyName]['AttributeValueList'] = [req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH ];
-  } else {
-    try {
-      condition[partitionKeyName]['AttributeValueList'] = [ convertUrlType(req.params[partitionKeyName], partitionKeyType) ];
-    } catch(err) {
-      res.statusCode = 500;
-      res.json({error: 'Wrong column type ' + err});
-    }
-  }
-
-  let queryParams = {
-    TableName: tableName,
-    KeyConditions: condition
-  }
-
-  try {
-    const data = await ddbDocClient.send(new QueryCommand(queryParams));
-    res.json(data.Items);
-  } catch (err) {
-    res.statusCode = 500;
-    res.json({error: 'Could not load items: ' + err.message});
-  }
-});
-
 /*****************************************
  * HTTP Get method for get single object *
  *****************************************/
 
-app.get(path + '/object' + hashKeyPath + sortKeyPath, async function(req, res) {
+app.get(path + '/object' + hashKeyPath + sortKeyPath, async function (req, res) {
   const params = {};
   if (userIdPresent && req.apiGateway) {
     params[partitionKeyName] = req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
@@ -121,7 +79,7 @@ app.get(path + '/object' + hashKeyPath + sortKeyPath, async function(req, res) {
     params[partitionKeyName] = req.params[partitionKeyName];
     try {
       params[partitionKeyName] = convertUrlType(req.params[partitionKeyName], partitionKeyType);
-    } catch(err) {
+    } catch (err) {
       res.statusCode = 500;
       res.json({error: 'Wrong column type ' + err});
     }
@@ -129,15 +87,14 @@ app.get(path + '/object' + hashKeyPath + sortKeyPath, async function(req, res) {
   if (hasSortKey) {
     try {
       params[sortKeyName] = convertUrlType(req.params[sortKeyName], sortKeyType);
-    } catch(err) {
+    } catch (err) {
       res.statusCode = 500;
       res.json({error: 'Wrong column type ' + err});
     }
   }
 
   let getItemParams = {
-    TableName: tableName,
-    Key: params
+    TableName: tableName, Key: params
   }
 
   try {
@@ -145,7 +102,7 @@ app.get(path + '/object' + hashKeyPath + sortKeyPath, async function(req, res) {
     if (data.Item) {
       res.json(data.Item);
     } else {
-      res.json(data) ;
+      res.json(data);
     }
   } catch (err) {
     res.statusCode = 500;
@@ -155,64 +112,65 @@ app.get(path + '/object' + hashKeyPath + sortKeyPath, async function(req, res) {
 
 
 /************************************
-* HTTP put method for insert object *
-*************************************/
+ * HTTP put method for insert object *
+ *************************************/
 
-app.put(path, async function(req, res) {
+app.put(path, async function (req, res) {
 
   if (userIdPresent) {
     req.body['userId'] = req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
   }
 
   let putItemParams = {
-    TableName: tableName,
-    Item: req.body
+    TableName: tableName, Item: req.body
   }
   try {
     let data = await ddbDocClient.send(new PutCommand(putItemParams));
-    res.json({ success: 'put call succeed!', url: req.url, data: data })
+    res.json({success: 'put call succeed!', url: req.url, data: data})
   } catch (err) {
     res.statusCode = 500;
-    res.json({ error: err, url: req.url, body: req.body });
+    res.json({error: err, url: req.url, body: req.body});
   }
 });
 
 /************************************
-* HTTP post method for insert object *
-*************************************/
+ * HTTP post method for insert object *
+ *************************************/
 
-app.post(path, async function(req, res) {
+app.post(path, async function (req, res) {
 
   if (userIdPresent) {
     req.body['userId'] = req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
   }
 
+  const body = { ...req.body }
+  body.jobId = 'JOB#' + uuidEmit();
+
   let putItemParams = {
-    TableName: tableName,
-    Item: req.body
+    TableName: tableName, Item: body
   }
   try {
     let data = await ddbDocClient.send(new PutCommand(putItemParams));
-    res.json({ success: 'post call succeed!', url: req.url, data: data })
+    res.json({success: 'post call succeed!', url: req.url, data: data})
   } catch (err) {
     res.statusCode = 500;
-    res.json({ error: err, url: req.url, body: req.body });
+    res.json({error: err, url: req.url, body: req.body});
   }
 });
 
 /**************************************
-* HTTP remove method to delete object *
-***************************************/
+ * HTTP remove method to delete object *
+ ***************************************/
 
-app.delete(path + '/object' + hashKeyPath + sortKeyPath, async function(req, res) {
+app.delete(path + '/object' + hashKeyPath + sortKeyPath, async function (req, res) {
   const params = {};
   if (userIdPresent && req.apiGateway) {
     params[partitionKeyName] = req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
   } else {
     params[partitionKeyName] = req.params[partitionKeyName];
-     try {
+    try {
       params[partitionKeyName] = convertUrlType(req.params[partitionKeyName], partitionKeyType);
-    } catch(err) {
+    } catch (err) {
       res.statusCode = 500;
       res.json({error: 'Wrong column type ' + err});
     }
@@ -220,15 +178,14 @@ app.delete(path + '/object' + hashKeyPath + sortKeyPath, async function(req, res
   if (hasSortKey) {
     try {
       params[sortKeyName] = convertUrlType(req.params[sortKeyName], sortKeyType);
-    } catch(err) {
+    } catch (err) {
       res.statusCode = 500;
       res.json({error: 'Wrong column type ' + err});
     }
   }
 
   let removeItemParams = {
-    TableName: tableName,
-    Key: params
+    TableName: tableName, Key: params
   }
 
   try {
@@ -240,11 +197,8 @@ app.delete(path + '/object' + hashKeyPath + sortKeyPath, async function(req, res
   }
 });
 
-app.listen(3000, function() {
+app.listen(3000, function () {
   console.log("App started")
 });
 
-// Export the app object. When executing the application local this does nothing. However,
-// to port it to AWS Lambda we will create a wrapper around that will load the app from
-// this file
 module.exports = app
