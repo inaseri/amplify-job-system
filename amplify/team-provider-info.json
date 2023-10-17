@@ -9,7 +9,25 @@
       "UnauthRoleName": "amplify-jobsystem-dev-161725-unauthRole",
       "StackName": "amplify-jobsystem-dev-161725",
       "StackId": "arn:aws:cloudformation:eu-central-1:854857063159:stack/amplify-jobsystem-dev-161725/55ec2dc0-6ceb-11ee-94db-02b8c1d3b53b",
-      "AmplifyAppId": "d2e4dx2q1gv3xl"
+      "AmplifyAppId": "d2e4dx2q1gv3xl",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-jobsystem-dev-161725-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
+    },
+    "categories": {
+      "function": {
+        "job": {
+          "deploymentBucketName": "amplify-jobsystem-dev-161725-deployment",
+          "s3Key": "amplify-builds/job-70694b4c665353435a34-build.zip"
+        }
+      },
+      "auth": {
+        "jobsystem": {}
+      },
+      "storage": {
+        "jobsystem": {}
+      },
+      "api": {
+        "job": {}
+      }
     }
   }
 }

@@ -1,0 +1,10 @@
+{
+  "resourceName": "jobsystem",
+  "tableName": "jobsystem",
+  "partitionKey": {
+    "fieldName": "jobId",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}
