@@ -30,8 +30,9 @@ export class JobFormComponent implements OnInit {
     })
   }
 
-  async submit() {
-    const result = await API.post('job', '/job', {body: this.jobForm.value})
-    console.log(result)
+  submit() {
+    API.post('job', '/job', {body: this.jobForm.value}).then(result => {
+      this.dialogRef.close();
+    })
   }
 }

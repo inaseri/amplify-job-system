@@ -10,8 +10,8 @@
     </button>
     <mat-menu #menu="matMenu">
       <button mat-menu-item (click)="auth()" >
-        <mat-icon>{{user ? 'login': 'logout'}}</mat-icon>
-        {{user ? 'Logout': 'Login'}}
+        <mat-icon>{{isLoggedIn ? 'login': 'logout'}}</mat-icon>
+        {{isLoggedIn ? 'Logout': 'Login'}}
       </button>
     </mat-menu>
   </div>

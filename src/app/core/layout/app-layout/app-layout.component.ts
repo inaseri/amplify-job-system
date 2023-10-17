@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import {Router} from "@angular/router";
+import {Auth} from "aws-amplify";
 
 @Component({
   selector: 'app-app-layout',
@@ -12,19 +13,22 @@ export class AppLayoutComponent implements OnInit {
 
   @ViewChild(MatSidenav) sidenav!: MatSidenav;
 
-  user: any = localStorage.getItem('job-system-access-token');
+  isLoggedIn: boolean = false;
 
 
   constructor(private router: Router) {
   }
 
   ngOnInit(): void {
+    this.authenticated();
   }
 
   logout(): void {
-    localStorage.clear();
-    sessionStorage.clear();
-    window.location.reload();
+    Auth.signOut().then(result => {
+      localStorage.clear();
+      sessionStorage.clear();
+      location.reload();
+    })
   }
 
   signIn(): void {
@@ -32,7 +36,17 @@ export class AppLayoutComponent implements OnInit {
   }
 
   auth() {
-    if (this.user) this.logout();
+    if (this.isLoggedIn) this.logout();
     else this.signIn();
+  }
+
+  authenticated(): void {
+    try {
+      Auth.currentAuthenticatedUser().then(result => {
+        this.isLoggedIn = true;
+      });
+    } catch {
+      this.isLoggedIn = false;
+    }
   }
 }

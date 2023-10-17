@@ -1,9 +1,19 @@
-<amplify-authenticator>
-  <ng-template
-    amplifySlot="authenticated"
-    let-user="user"
-    let-signOut="signOut"
-  >
-    <router-outlet></router-outlet>
-  </ng-template>
-</amplify-authenticator>
+<mat-toolbar class='mat-elevation-z8 d-flex align-items-center' color="primary">
+  <span>Job System</span>
+  <a [routerLink]="['/dashboard']" mat-icon-button>
+    <mat-icon>home</mat-icon>
+  </a>
+</mat-toolbar>
+
+<div class="auth-container">
+  <div class="d-block text-center">
+    <h1 class="fw-bolder mb-5">Welcome</h1>
+    <amplify-authenticator>
+      <ng-template
+        amplifySlot="authenticated"
+        let-user="user"
+      >
+      </ng-template>
+    </amplify-authenticator>
+  </div>
+</div>
