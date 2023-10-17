@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-jobsystem-dev-161725-authRole",
+      "UnauthRoleArn": "arn:aws:iam::854857063159:role/amplify-jobsystem-dev-161725-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::854857063159:role/amplify-jobsystem-dev-161725-authRole",
+      "Region": "eu-central-1",
+      "DeploymentBucketName": "amplify-jobsystem-dev-161725-deployment",
+      "UnauthRoleName": "amplify-jobsystem-dev-161725-unauthRole",
+      "StackName": "amplify-jobsystem-dev-161725",
+      "StackId": "arn:aws:cloudformation:eu-central-1:854857063159:stack/amplify-jobsystem-dev-161725/55ec2dc0-6ceb-11ee-94db-02b8c1d3b53b",
+      "AmplifyAppId": "d2e4dx2q1gv3xl"
+    }
+  }
+}
