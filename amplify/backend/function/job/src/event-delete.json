@@ -1,6 +1,6 @@
 {
-  "httpMethod": "GET",
-  "path": "/job",
+  "httpMethod": "DELETE",
+  "path": "/job/16975664-0365-4063-a274-771114063274/JOB",
   "headers": {
     "Content-Type": "application/json"
   },

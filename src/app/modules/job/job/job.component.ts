@@ -28,4 +28,10 @@ export class JobComponent implements OnInit {
       this.jobs = result;
     });
   }
+
+  deleteJob(sortKey: string): void {
+    API.del('job', `/job/${sortKey}/JOB`, {}).then(result => {
+      this.getJobs();
+    })
+  }
 }
