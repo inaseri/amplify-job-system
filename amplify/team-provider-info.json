@@ -16,17 +16,17 @@
       "function": {
         "job": {
           "deploymentBucketName": "amplify-jobsystem-dev-161725-deployment",
-          "s3Key": "amplify-builds/job-70694b4c665353435a34-build.zip"
+          "s3Key": "amplify-builds/job-3967543568744d4f3370-build.zip"
         }
-      },
-      "auth": {
-        "jobsystem": {}
       },
       "storage": {
         "jobsystem": {}
       },
       "api": {
         "job": {}
+      },
+      "auth": {
+        "jobsystemcbe52ea8": {}
       }
     }
   }

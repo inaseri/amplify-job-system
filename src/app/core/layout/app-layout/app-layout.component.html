@@ -1,0 +1,22 @@
+<mat-toolbar class='mat-elevation-z8 d-flex align-items-center'>
+  <span>Job System</span>
+  <a [routerLink]="['/dashboard']" mat-icon-button>
+    <mat-icon>home</mat-icon>
+  </a>
+
+  <div class="ms-auto d-flex align-items-center">
+    <button mat-icon-button class="ms-auto" [matMenuTriggerFor]="menu">
+      <mat-icon>manage_accounts</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="auth()" >
+        <mat-icon>{{user ? 'login': 'logout'}}</mat-icon>
+        {{user ? 'Logout': 'Login'}}
+      </button>
+    </mat-menu>
+  </div>
+</mat-toolbar>
+
+<div class='content mat-elevation-z8'>
+  <router-outlet></router-outlet>
+</div>

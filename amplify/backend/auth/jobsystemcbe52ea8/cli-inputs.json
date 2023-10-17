@@ -1,10 +1,10 @@
 {
   "version": "1",
   "cognitoConfig": {
-    "identityPoolName": "jobsystem_identitypool_5fa554a9",
-    "allowUnauthenticatedIdentities": true,
-    "resourceNameTruncated": "jobsys5fa554a9",
-    "userPoolName": "jobsystem_userpool_5fa554a9",
+    "identityPoolName": "jobsystemcbe52ea8_identitypool_cbe52ea8",
+    "allowUnauthenticatedIdentities": false,
+    "resourceNameTruncated": "jobsyscbe52ea8",
+    "userPoolName": "jobsystemcbe52ea8_userpool_cbe52ea8",
     "autoVerifiedAttributes": [
       "email"
     ],
@@ -31,12 +31,18 @@
     "userpoolClientReadAttributes": [
       "email"
     ],
-    "userpoolClientLambdaRole": "jobsys5fa554a9_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "jobsyscbe52ea8_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
+    "sharedId": "cbe52ea8",
+    "resourceName": "jobsystemcbe52ea8",
     "authSelections": "identityPoolAndUserPool",
-    "resourceName": "jobsystem",
-    "sharedId": "5fa554a9",
+    "useDefault": "default",
+    "usernameAttributes": [
+      "email"
+    ],
+    "userPoolGroupList": [],
     "serviceName": "Cognito",
-    "useDefault": "manual"
+    "usernameCaseSensitive": false,
+    "useEnabledMfas": true
   }
 }
