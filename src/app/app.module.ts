@@ -13,6 +13,7 @@ import {MatButtonModule} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
 import {MatMenuModule} from "@angular/material/menu";
 import {MatToolbarModule} from "@angular/material/toolbar";
+import {ShareModule} from "./share/share.module";
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import {MatToolbarModule} from "@angular/material/toolbar";
     AppRoutingModule,
     BrowserAnimationsModule,
     CoreModule,
+    ShareModule,
     AmplifyAuthenticatorModule,
     MatDatepickerModule,
     MatNativeDateModule,
